@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="content container-fluid">
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h3 class="page-title">View Attendance</h3>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'hod_home' %}">Attendance</a></li>
+                    <li class="breadcrumb-item active">View Attendance</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    {% include 'includes/messages.html' %}
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <form method="post" action="?action=filter_attendance">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <label>Subject</label>
+                                    <select class="form-control" name="subject_id">
+                                        <option value="">Select Subject</option>
+                                        {% for i in subjects %}
+                                        <option value="{{ i.id }}" {% if get_subject.id == i.id %} selected {% endif %}>{{ i.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <label>Session Year</label>
+                                    <select class="form-control" name="session_year_id">
+                                        <option value="">Select Session Year</option>
+                                        {% for i in session_years %}
+                                        <option value="{{ i.id }}" {% if get_session_year.id == i.id %} selected {% endif %}>{{ i.session_start }} To {{ i.session_end }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="form-group">
+                                    <label>Start Date</label>
+                                    <input type="date" class="form-control" name="start_date" value="{{ start_date|default:'' }}" required>
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="form-group">
+                                    <label>End Date</label>
+                                    <input type="date" class="form-control" name="end_date" value="{{ end_date|default:'' }}" required>
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="form-group">
+                                    <label>&nbsp;</label><br>
+                                    <button type="submit" class="btn btn-primary">Filter</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col">
+                            <h5 class="card-title">Attendance Results</h5>
+                        </div>
+                        <div class="col text-right">
+                            {% if attendance_reports %}
+                            <a href="?action=download_csv" class="btn btn-success">Download CSV</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table id="table_id" class="table table-hover table-center mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Subject</th>
+                                    <th>Session Year</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in attendance_reports %}
+                                <tr>
+                                    <td>{{ i.student_id.admin.first_name }}</td>
+                                    <td>{{ i.attendance_id.subject_id.name }}</td>
+                                    <td>{{ i.attendance_id.session_year_id.session_start }} To {{ i.attendance_id.session_year_id.session_end }}</td>
+                                    <td>{{ i.attendance_id.attendance_data|date:"Y-m-d" }}</td>
+                                    <td>
+                                        {% if i.status == True %}
+                                        <span class="badge badge-success">Present</span>
+                                        {% else %}
+                                        <span class="badge badge-danger">Absent</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="5">No attendance records found.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
