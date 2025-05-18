@@ -68,19 +68,31 @@ def Home(request):
 
 @login_required(login_url='/')
 def STUDENT_NOTIFICATION(request):
-    student = Student.objects.filter(admin=request.user.id)
-    for i in student:
-        student_id = i.id
-        notification = Student_Notification.objects.filter(student_id=student_id)
-        context = {'notification': notification}
-        return render(request, 'Student/notification.html', context)
+    try:
+        # Get the Student object linked to the logged-in user
+        student_instance = Student.objects.get(admin=request.user)
+        # Filter notifications for that specific student, ordered by creation date
+        notifications = Student_Notification.objects.filter(student_id=student_instance).order_by('-created_at')
+        context = {'notification': notifications}
+    except Student.DoesNotExist:
+        messages.error(request, "Student profile not found.")
+        # Pass an empty list to the template to avoid errors if profile is missing
+        context = {'notification': []}
+        # Optionally, redirect to a home or error page:
+        # return redirect('Home') # Assuming 'Home' is the name of your student dashboard URL
+    
+    return render(request, 'Student/notification.html', context)
 
 @login_required(login_url='/')
 def STUDENT_NOTIFICATION_MARK_AS_DONE(request, status):
-    notification = Student_Notification.objects.get(id=status)
-    notification.status = 1
-    notification.save()
-    return redirect('student_notification')
+    try:
+        notification = Student_Notification.objects.get(id=status, student_id__admin=request.user) # Ensure student owns notification
+        notification.status = 1
+        notification.save()
+        messages.success(request, 'Notification marked as read.')
+    except Student_Notification.DoesNotExist:
+        messages.error(request, 'Notification not found or access denied.')
+    return redirect('student_notification') # Name of the URL for student to view notifications
 
 @login_required(login_url='/')
 def STUDENT_FEEDBACK(request):

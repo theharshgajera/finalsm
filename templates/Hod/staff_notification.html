@@ -1,18 +1,20 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block content %}
 <div class="content container-fluid">
     <div class="page-header">
         <div class="row align-items-center">
             <div class="col">
-                <h3 class="page-title">Staff</h3>
+                <h3 class="page-title">Staff Notification</h3>
                 <ul class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{% url 'hod_home' %}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Staff</li>
+                    <li class="breadcrumb-item active">Staff Notification</li>
                 </ul>
             </div>
             <div class="col-auto text-right float-right ml-auto">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-                    View All Notification
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#viewAllStaffNotificationsModal">
+                    View All Notifications
                 </button>
             </div>
         </div>
@@ -23,7 +25,7 @@
             <div class="card card-table">
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="table_id" class="table table-hover table-center mb-0">
+                        <table id="table_id_staff" class="table table-hover table-center mb-0">
                             <thead>
                                 <tr>
                                     <th>ID</th>
@@ -33,19 +35,25 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            {% for i in staff %}
+                            {% for st in staff %} {# Changed loop variable for clarity #}
                                 <tr>
-                                    <td>{{i.id}}</td>
+                                    <td>{{st.id}}</td>
                                     <td>
                                         <h2 class="table-avatar">
-                                            <a href="student-details.html" class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="/{{i.admin.profile_pic}}" alt="User Image"></a>
-                                            <a href="student-details.html">{{i.admin.first_name}} {{i.admin.last_name}}</a>
+                                            <a href="#" class="avatar avatar-sm mr-2"> {# Consider a detail URL if available #}
+                                                {% if st.admin.profile_pic %}
+                                                <img class="avatar-img rounded-circle" src="{{ st.admin.profile_pic.url }}" alt="{{ st.admin.first_name }} {{ st.admin.last_name }}">
+                                                {% else %}
+                                                <img class="avatar-img rounded-circle" src="{% static 'assets/img/default-avatar.png' %}" alt="Default User Image">
+                                                {% endif %}
+                                            </a>
+                                            <a href="#">{{st.admin.first_name}} {{st.admin.last_name}}</a>
                                         </h2>
                                     </td>
-                                    <td>{{i.admin.email}}</td>
+                                    <td>{{st.admin.email}}</td>
                                     <td class="text-right">
-                                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#sendnotification-{{forloop.counter}}">
-                                            Send Notification
+                                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#sendStaffNotificationModal-{{st.id}}">
+                                            Send Staff Notification
                                         </button>
                                     </td>
                                 </tr>
@@ -57,91 +65,61 @@
             </div>
         </div>
     </div>
-    
-    <!-- Send All Staff Notification Button -->
-    <div class="text-center mt-3 mb-4">
-        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#sendAllNotification">
-            Send Notification to All Staff
-        </button>
-    </div>
 
-    <!-- Send All Staff Notification Modal -->
-    <div class="modal fade" id="sendAllNotification" tabindex="-1" role="dialog" aria-labelledby="sendAllNotificationTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal fade" id="viewAllStaffNotificationsModal" tabindex="-1" role="dialog" aria-labelledby="viewAllStaffNotificationsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="sendAllNotificationTitle">Send Notification to All Staff</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form method="post" action="{% url 'save_staff_notification' %}">
-                        {% csrf_token %}
-                        <input type="hidden" name="staff_id" value="all">
-                        <div class="form-group">
-                            <textarea name="message" class="form-control" placeholder="Write your message here" required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Send to All Staff</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                    <h5 class="modal-title" id="viewAllStaffNotificationsModalLabel">All Staff Notifications</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="card card-table">
-                                <div class="card-body">
-                                    <div class="table-responsive">
-                                        <table id="table_id" class="table table-hover table-center mb-0">
-                                            <thead>
-                                                <tr>
-                                                    <th style="width:60%">Message</th>
-                                                    <th style="width:30%" class="text-right">Status</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                            {% for i in see_notification %}
-                                                <tr>
-                                                    <td>{{i.message}}</td>
-                                                    {% if i.status == 0 %}
-                                                        <td><span class="badge badge-danger">UnRead The Message</span></td>
-                                                    {% else %}
-                                                        <td><span class="badge badge-success">Read The Message</span></td>
-                                                    {% endif %}
-                                                </tr>
-                                            {% endfor %}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="table-responsive">
+                        <table id="table_id_all_notifications_staff" class="table table-hover table-center mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Staff Name</th>
+                                    <th>Message</th>
+                                    <th>Sent At</th>
+                                    <th class="text-right">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for notification_item in see_notification %} {# Using 'see_notification' context variable from Hod_Views.STAFF_SEND_NOTIFICATION #}
+                                <tr>
+                                    <td>{{ notification_item.staff_id.admin.first_name }} {{ notification_item.staff_id.admin.last_name }}</td>
+                                    <td>{{notification_item.message}}</td>
+                                    <td>{{ notification_item.created_at|date:"Y-m-d H:i" }}</td>
+                                    {% if notification_item.status == 0 %}
+                                        <td class="text-right"><span class="badge badge-danger">Unread</span></td>
+                                    {% else %}
+                                        <td class="text-right"><span class="badge badge-success">Read</span></td>
+                                    {% endif %}
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="4" class="text-center">No notifications found.</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
         </div>
     </div>
-    {% for i in staff %}
-        <div class="modal fade" id="sendnotification-{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle1" aria-hidden="true">
+
+    {% for st in staff %} {# Changed loop variable for clarity #}
+        <div class="modal fade" id="sendStaffNotificationModal-{{st.id}}" tabindex="-1" role="dialog" aria-labelledby="sendStaffNotificationModalLabel-{{st.id}}" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle1">Send Staff Notification To {{i.admin.first_name}} {{i.admin.last_name}}</h5>
+                        <h5 class="modal-title" id="sendStaffNotificationModalLabel-{{st.id}}">Send Notification To {{st.admin.first_name}} {{st.admin.last_name}}</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
@@ -150,8 +128,9 @@
                         <form method="post" action="{% url 'save_staff_notification' %}">
                             {% csrf_token %}
                             <div class="form-group">
-                                <input type="text" class="form-control" name="message">
-                                <input type="text" class="form-control" name="staff_id" value="{{i.admin.id}}" hidden>
+                                <label for="message-staff-{{st.id}}">Message</label>
+                                <textarea class="form-control" name="message" id="message-staff-{{st.id}}" rows="3" required></textarea>
+                                <input type="hidden" name="staff_id" value="{{st.admin.id}}">
                             </div>
                             <button type="submit" class="btn btn-primary">Send Notification</button>
                         </form>
@@ -163,4 +142,5 @@
             </div>
         </div>
     {% endfor %}
+</div>
 {% endblock %}

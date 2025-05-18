@@ -25,33 +25,47 @@ def HOME(request):
     return render(request, 'Staff/home.html', context)
 
 @login_required(login_url='/')
-def NOTIFICATIONS(request):
-    staff = Staff.objects.filter(admin=request.user)
-    for i in staff:
-        staff_id = i.id
-        notification = Staff_Notification.objects.filter(staff_id=staff_id)
-        context = {
-            'notification': notification,
-        }
-        return render(request, 'Staff/notification.html', context)
+def NOTIFICATIONS(request): # This view is for staff to see their notifications
+    try:
+        # Get the Staff object linked to the logged-in user
+        staff_instance = Staff.objects.get(admin=request.user)
+        # Filter notifications for that specific staff member, ordered by creation date
+        notifications = Staff_Notification.objects.filter(staff_id=staff_instance).order_by('-created_at')
+        context = {'notification': notifications}
+    except Staff.DoesNotExist:
+        messages.error(request, "Staff profile not found.")
+        # Pass an empty list to the template to avoid errors if profile is missing
+        context = {'notification': []}
+        # Optionally, redirect to a home or error page:
+        # return redirect('staff_home') # Assuming 'staff_home' is your staff dashboard URL
+    
+    return render(request, 'Staff/notification.html', context)
+
 
 @login_required(login_url='/')
 def STAFF_NOTIFICATION_MARK_AS_DONE(request, status):
-    notification = Staff_Notification.objects.get(id=status)
-    notification.status = 1
-    notification.save()
-    return redirect('notifications')
+    try:
+        notification = Staff_Notification.objects.get(id=status, staff_id__admin=request.user) # Ensure staff owns notification
+        notification.status = 1
+        notification.save()
+        messages.success(request, 'Notification marked as read.')
+    except Staff_Notification.DoesNotExist:
+        messages.error(request, 'Notification not found or access denied.')
+    return redirect('notifications') # 'notifications' is the URL name for staff viewing their notifications
 
 @login_required(login_url='/')
 def STAFF_APPLY_LEAVE(request):
     staff = Staff.objects.filter(admin=request.user)
-    for i in staff:
+    for i in staff: # This loop is redundant if Staff has a OneToOneField with CustomUser
         staff_id = i.id
         staff_leave_history = Staff_leave.objects.filter(staff_id=staff_id)
         context = {
             'staff_leave_history': staff_leave_history,
         }
         return render(request, 'Staff/apply_leave.html', context)
+    # Fallback if staff not found, though .get() is better
+    return redirect('staff_home')
+
 
 @login_required(login_url='/')
 def STAFF_APPLY_LEAVE_SAVE(request):

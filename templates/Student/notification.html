@@ -4,9 +4,9 @@
     <div class="page-header">
         <div class="row align-items-center">
             <div class="col">
-                <h3 class="page-title">Notifications</h3>
+                <h3 class="page-title">My Notifications</h3>
                 <ul class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'Home' %}">Dashboard</a></li> {# Assumes 'Home' is student's dashboard URL name #}
                     <li class="breadcrumb-item active">Notifications</li>
                 </ul>
             </div>
@@ -21,23 +21,37 @@
                         <table id="table_id" class="table table-hover table-center mb-0">
                             <thead>
                                 <tr>
+                                    <th>Date & Time</th>
                                     <th>Message</th>
+                                    <th class="text-right">Status</th>
                                     <th class="text-right">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                             {% for i in notification %}
                                 <tr>
+                                    <td>{{ i.created_at|date:"Y-m-d H:i" }}</td>
                                     <td>{{i.message}}</td>
+                                    <td class="text-right">
+                                        {% if i.status == 0 %}
+                                            <span class="badge badge-danger">Unread</span>
+                                        {% else %}
+                                            <span class="badge badge-success">Read</span>
+                                        {% endif %}
+                                    </td>
                                     <td class="text-right">
                                         <div class="actions">
                                             {% if i.status == 0 %}
-                                                <a href="{% url 'student_notification_mark_as_done' status=i.id %}" class="btn btn-danger">Mark As Done</a>
+                                                <a href="{% url 'student_notification_mark_as_done' status=i.id %}" class="btn btn-sm btn-primary">Mark As Read</a>
                                             {% else %}
-                                                <button class="btn btn-danger" disabled="disabled">Mark As Done</button>
+                                                <button class="btn btn-sm btn-secondary" disabled="disabled">Read</button>
                                             {% endif %}
                                         </div>
                                     </td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="4" class="text-center">No notifications found.</td>
                                 </tr>
                             {% endfor %}
                             </tbody>
