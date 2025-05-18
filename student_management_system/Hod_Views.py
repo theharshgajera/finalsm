@@ -825,10 +825,10 @@ def STUDENT_DISAPPROVE_LEAVE(request, id): # id is Student_leave ID
 @login_required(login_url='/')
 def STAFF_FEEDBACK(request):
     feedback = Staff_Feedback.objects.all().order_by('-created_at')
-    # feedback_history = Staff_Feedback.objects.all().order_by('-id')[:5] # Redundant if feedback is ordered
+    feedback_history = Staff_Feedback.objects.all().order_by('-id')[:5] # Redundant if feedback is ordered
     context = {
         'feedback': feedback, # Pass all feedback for display
-        # 'feedback_history': feedback_history, # This was for a modal in original code, can be the same as 'feedback'
+        'feedback_history': feedback_history, # This was for a modal in original code, can be the same as 'feedback'
     }
     return render(request, 'Hod/staff_feedback.html', context)
 
