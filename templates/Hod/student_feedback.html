@@ -4,7 +4,7 @@
     <div class="page-header">
         <div class="row align-items-center">
             <div class="col">
-                <h3 class="page-title">Student Feedback</h3>
+                <h3 class="page-title">Student Query</h3>
                 <ul class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{% url 'hod_home' %}">Dashboard</a></li>
                     <li class="breadcrumb-item active">Student Feedback</li>
@@ -12,7 +12,7 @@
             </div>
             <div class="col-auto text-right float-right ml-auto">
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-                    View Recent Student Feedbacks
+                    View Recent Student Query
                 </button>
             </div>
         </div>
@@ -28,7 +28,7 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Student Name</th>
-                                    <th>Feedback</th>
+                                    <th>Query</th>
                                     <th>Date</th>
                                     <th>Status</th>
                                     <th class="text-right">Action</th>
@@ -73,7 +73,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Recent Student Feedbacks</h5>
+                <h5 class="modal-title" id="exampleModalLongTitle">Recent Student Query</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -89,7 +89,7 @@
                                             <tr>
                                                 <th>ID</th>
                                                 <th>Student Name</th>
-                                                <th>Feedback</th>
+                                                <th>Query</th>
                                                 <th>Reply</th>
                                                 <th>Status</th>
                                                 <th>Date</th>

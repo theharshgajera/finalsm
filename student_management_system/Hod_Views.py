@@ -974,3 +974,11 @@ def BULK_ADD_STAFF(request):
             return redirect('bulk_add_staff')
     
     return render(request, 'Hod/bulk_add_staff.html')
+
+@login_required(login_url='/')
+def STUDENT_DETAILS(request, id):
+    student = Student.objects.get(id=id)
+    context = {
+        'student': student,
+    }
+    return render(request, 'Hod/student_details.html', context)

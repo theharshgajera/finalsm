@@ -9,6 +9,8 @@ from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
 from reportlab.lib.styles import getSampleStyleSheet
 import io
+import google.generativeai as genai
+from django.conf import settings
 
 @login_required(login_url='/')
 def Home(request):
@@ -387,3 +389,37 @@ def STUDENT_DELETE_NOTE(request, note_id):
     except Note.DoesNotExist:
         messages.error(request, 'Note not found.')
     return redirect('student_notes')
+
+
+@login_required
+def student_doubt_solver(request):
+    context = {}
+    
+    if request.method == 'POST':
+        question = request.POST.get('question')
+        
+        if not settings.GEMINI_API_KEY:
+            messages.error(request, 'Gemini API key is not configured')
+            return render(request, 'Student/doubt_solver.html', context)
+            
+        # Configure the Gemini API
+        genai.configure(api_key=settings.GEMINI_API_KEY)
+        model = genai.GenerativeModel('gemini-1.5-flash')  # Fixed model name
+        
+        # Enhanced prompt for student-friendly responses
+        enhanced_prompt = f"""Please help explain this to a student in a very simple and easy-to-understand way:
+1. Use simple language and avoid complex technical terms
+2. Break down the explanation into small, digestible parts
+3. Include relevant examples if possible
+4. Use a friendly and encouraging tone
+5. dont's try to bold any words or anything as ** looks ugly
+
+Student's Question: {question}"""
+        
+        try:
+            response = model.generate_content(enhanced_prompt)
+            context['answer'] = response.text
+        except Exception as e:
+            messages.error(request, f'Error generating response: {str(e)}')
+    
+    return render(request, 'Student/doubt_solver.html', context)

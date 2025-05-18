@@ -17,6 +17,7 @@ urlpatterns = [
     path('Hod/Home', Hod_Views.HOME, name='hod_home'),
     path('Hod/Student/Add', Hod_Views.ADD_STUDENT, name='add_student'),
     path('Hod/Student/View', Hod_Views.VIEW_STUDENT, name='view_student'),
+    path('Hod/Student/Details/<str:id>', Hod_Views.STUDENT_DETAILS, name='student_details'),  # Add this line
     path('Hod/Student/Edit/<str:id>', Hod_Views.EDIT_STUDENT, name='edit_student'),
     path('Hod/Student/Update', Hod_Views.UPDATE_STUDENT, name='update_student'),
     path('Hod/Student/Delete/<str:admin>', Hod_Views.DELETE_STUDENT, name='delete_student'),
@@ -107,6 +108,7 @@ urlpatterns = [
 
     # Student Study Materials URL
     path('student/study-materials/', Student_Views.STUDENT_VIEW_MATERIALS, name='student_view_materials'),
+    path('student/doubt-solver/', Student_Views.student_doubt_solver, name='student_doubt_solver'),
 
     # Parent URLs
     path('Parent/Home', parent_views.HOME, name='parent_home'),

@@ -1,4 +1,5 @@
-arabic-reshaper
+python-dotenv
+google-generativeai
 asgiref
 certifi
 charset-normalizer

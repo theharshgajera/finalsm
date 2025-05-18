@@ -3,10 +3,10 @@
 <div class="page-header">
     <div class="row align-items-center">
         <div class="col">
-            <h3 class="page-title">Feedback</h3>
+            <h3 class="page-title">Query</h3>
             <ul class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{% url 'staff_home' %}">Dashboard</a></li>
-                <li class="breadcrumb-item active">Feedback</li>
+                <li class="breadcrumb-item active">Query</li>
             </ul>
         </div>
     </div>
@@ -18,29 +18,29 @@
                 <form method="post" action="{% url 'staff_send_feedback' %}">
                     {% csrf_token %}
                     <div class="col-12">
-                        <h5 class="form-title"><span>Send Feedback</span></h5>
+                        <h5 class="form-title"><span>Send Query</span></h5>
                     </div>
                     {% include 'includes/messages.html' %}
                     <div class="col-sm-11">
                         <div class="form-group">
-                            <label>Feedback Message</label>
+                            <label>Query Message</label>
                             <textarea class="form-control" name="feedback" style="height:250px;" required></textarea>
                         </div>
                     </div>
                     <div class="col-12">
-                        <button type="submit" class="btn btn-primary">Send Feedback</button>
+                        <button type="submit" class="btn btn-primary">Send Query</button>
                     </div>
                 </form>
 
                 <div class="col-12 mt-4">
-                    <h5 class="form-title"><span>My Feedback History</span></h5>
+                    <h5 class="form-title"><span>My Query History</span></h5>
                     {% if feedback_history %}
                         <div class="table-responsive">
                             <table class="table table-hover table-center mb-0">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
-                                        <th>Feedback</th>
+                                        <th>Query</th>
                                         <th>Reply</th>
                                         <th>Date</th>
                                     </tr>
@@ -64,7 +64,7 @@
                             </table>
                         </div>
                     {% else %}
-                        <p>No feedback history available.</p>
+                        <p>No Query history available.</p>
                     {% endif %}
                 </div>
             </div>

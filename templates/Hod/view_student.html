@@ -54,11 +54,14 @@
                                 <tr>
                                     <td>{{ i.id }}</td>
                                     <td>
-                                        <h2 class="table-avatar">
-                                            <a href="student-details.html" class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="/{{ i.admin.profile_pic }}" alt="User Image"></a>
-                                            <a href="student-details.html">{{ i.admin.first_name }}</a>
-                                        </h2>
-                                    </td>
+                                        <td>
+                                            <h2 class="table-avatar">
+                                                <a href="{% url 'student_details' i.id %}" class="avatar avatar-sm mr-2">
+                                                    <img class="avatar-img rounded-circle" src="{% if i.admin.profile_pic %}/{{ i.admin.profile_pic }}{% else %}/media/profile_pic/pdpu_image.jpg{% endif %}" alt="User Image">
+                                                </a>
+                                                <a href="{% url 'student_details' i.id %}">{{ i.admin.first_name }}</a>
+                                            </h2>
+                                        </td>
                                     <td>{{ i.enrollment_no }}</td>
                                     <td>{{ i.admin.email }}</td>
                                     <td>{{ i.course_id.name }}</td>

@@ -63,10 +63,10 @@
                     <a href="{% url 'view_attendance' %}"><i class="fa fa-calendar"></i> <span>View Attendance</span></a>
                 </li>
                 <li class="">
-                    <a href="{% url 'staff_feedback_reply' %}"><i class="fas fa-comments"></i> <span>Staff Feedback</span></a>
+                    <a href="{% url 'staff_feedback_reply' %}"><i class="fas fa-comments"></i> <span>Staff Query</span></a>
                 </li>
                 <li class="">
-                    <a href="{% url 'get_student_feedback' %}"><i class="fas fa-comments"></i> <span>Student Feedback</span></a>
+                    <a href="{% url 'get_student_feedback' %}"><i class="fas fa-comments"></i> <span>Student Query</span></a>
                 </li>
                 <li class="">
                     <a href="{% url 'staff_leave_view' %}"><i class="fas fa-envelope"></i> <span>Staff Leave</span></a>
@@ -105,7 +105,7 @@
                     <a href="{% url 'staff_apply_leave' %}"><i class="fas fa-envelope-open"></i> <span>Apply For Leave</span></a>
                 </li>
                 <li class="">
-                    <a href="{% url 'staff_feedback' %}"><i class="fas fa-comment"></i> <span>Send Feedback</span></a>
+                    <a href="{% url 'staff_feedback' %}"><i class="fas fa-comment"></i> <span>Send Query</span></a>
                 </li>
                 <li class="">
                     <a href="{% url 'notifications' %}"><i class="fas fa-bell"></i> <span>Notification</span></a>
@@ -141,13 +141,16 @@
                     <a href="{% url 'student_leave' %}"><i class="fa fa-pray" aria-hidden="true"></i><span>Apply For Leave</span></a>
                 </li>
                 <li class="">
-                    <a href="{% url 'student_feedback' %}"><i class="fas fa-comment" aria-hidden="true"></i><span>Send Feedback</span></a>
+                    <a href="{% url 'student_feedback' %}"><i class="fas fa-comment" aria-hidden="true"></i><span>Send Query</span></a>
                 </li>
                 <li class="">
                     <a href="{% url 'student_notification' %}"><i class="fas fa-bell" aria-hidden="true"></i><span>Notifications</span></a>
                 </li>
                 <li class="">
                     <a href="{% url 'student_notes' %}"><i class="fas fa-sticky-note"></i> <span>Notes</span></a>
+                </li>
+                <li class="">
+                    <a href="{% url 'student_doubt_solver' %}"><i class="fas fa-question-circle"></i> <span>Doubt Solver</span></a>
                 </li>
                 <li class="">
                     <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>

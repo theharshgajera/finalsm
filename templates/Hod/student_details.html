@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+<div class="content container-fluid">
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h3 class="page-title">Student Details</h3>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'hod_home' %}">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'view_student' %}">Students</a></li>
+                    <li class="breadcrumb-item active">Student Details</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="about-info">
+                        <h4>About {{ student.admin.first_name }}</h4>
+                        
+                        <div class="media mt-3">
+                            <img src="/{{ student.admin.profile_pic }}" class="mr-3" alt="..." style="width: 150px; height: 150px; object-fit: cover;">
+                            <div class="media-body">
+                                <ul>
+                                    <li>
+                                        <span class="title-span">Full Name : </span>
+                                        <span class="info-span">{{ student.admin.first_name }}</span>
+                                    </li>
+                                    <li>
+                                        <span class="title-span">Enrollment No : </span>
+                                        <span class="info-span">{{ student.enrollment_no }}</span>
+                                    </li>
+                                    <li>
+                                        <span class="title-span">Email : </span>
+                                        <span class="info-span">{{ student.admin.email }}</span>
+                                    </li>
+                                    <li>
+                                        <span class="title-span">Course : </span>
+                                        <span class="info-span">{{ student.course_id.name }}</span>
+                                    </li>
+                                    <li>
+                                        <span class="title-span">Gender : </span>
+                                        <span class="info-span">{{ student.gender }}</span>
+                                    </li>
+                                    <li>
+                                        <span class="title-span">Address : </span>
+                                        <span class="info-span">{{ student.address }}</span>
+                                    </li>
+                                    <li>
+                                        <span class="title-span">Session : </span>
+                                        <span class="info-span">{{ student.session_year_id.session_start }} To {{ student.session_year_id.session_end }}</span>
+                                    </li>
+                                    <li>
+                                        <span class="title-span">Semester : </span>
+                                        <span class="info-span">{{ student.get_semester_display|default:'Not Assigned' }}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-12">
+                                <div class="skill-info">
+                                    <h4>Additional Information</h4>
+                                    <p><strong>Created At:</strong> {{ student.created_at }}</p>
+                                    <p><strong>Last Updated:</strong> {{ student.updated_at }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

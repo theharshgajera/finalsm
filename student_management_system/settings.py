@@ -1,5 +1,8 @@
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()  # Add this line after imports
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -10,6 +13,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-^4qo-x+(kr@ij=(n3ey_-=pwi6@-)gj&w4oewa13e!zkeqy7s9'
+
+# Gemini API Key
+GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', '')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -123,4 +129,5 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+GEMINI_API_KEY='AIzaSyC5rlivQi9ryKAU77ITi2yj2voPxEJpZZA'
 AUTH_USER_MODEL = 'app.CustomUser'
